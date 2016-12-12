@@ -71,7 +71,7 @@ class AppService {
         exec(pull, { cwd: this._config.directory }, (errorP, stdoutP, stderrP) => {
             this.log(statuses.PROCESSING, `Executing`);
             if (errorP) {
-                this.log(statuses.ERROR, `Error while Pulling changes - ${stderrP}`);
+                this.log(statuses.ERROR, `Error while Pulling changes: ${stderrP || 'Unknown Error'}`);
                 return;            
             }
 
@@ -82,7 +82,7 @@ class AppService {
 
             exec(this._config['post-script'], { cwd: this._config.directory }, (errorPS, stdoutPS, stderrPS) => {
                 if (errorPS) {
-                    this.log(statuses.ERROR, `Error while Deploying changes - ${stderrPS}`);
+                    this.log(statuses.ERROR, `Error while Deploying changes: ${stderrPS || 'Unknown Error'}`);
                     return;            
                 }
 
