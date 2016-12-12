@@ -23,7 +23,8 @@ Add `apps.js` in the `config` directory to define the CI enabled apps.  The foll
 [
     {
         "id": "Test1",
-        "directory": "C:\\app\\Test1\\"
+        "directory": "C:\\app\\Test1\\",
+        "post-script": "run.bat"
     },
     {
         "id": "Test2",

@@ -31,7 +31,7 @@ function getRunningApps() {
 }
 
 function executeApp(id) {
-    appsList[id].execute();
+    appsList[id].execute(true);
     return true;
 }
 

@@ -14,8 +14,8 @@ class AppService {
     }
 
     init(config) {
-        const newConfig = Object.assign(defaultConfig, config);
-        this._config = JSON.parse(JSON.stringify(newConfig));
+        const newConfig = Object.assign({}, defaultConfig, config);
+        this._config = newConfig;
         this.log(statuses.IDLE, 'Adding new config');
         if (!this._config.directory) {
             this.log(statuses.ERROR, 'Error: Directory is not defined');
@@ -51,6 +51,9 @@ class AppService {
 
     log(type, text) {
         this._status = type;
+        if (type === statuses.OK || type === statuses.ERROR || type === statuses.NO_CHANGES) {
+            this._lastStatus = type;
+        }
         this._logs.push({
             type: type,
             text: text,
@@ -59,7 +62,7 @@ class AppService {
         loggingHelper.log(this._config.id, text);
     }
 
-    execute() {
+    execute(force) {
         this._lastExecuted = new Date();
         this._status = statuses.PROCESSING;
         const pluginPath = `../plugins/${this._config.plugin}.json`;
@@ -75,19 +78,23 @@ class AppService {
                 return;            
             }
 
-            if (stdoutP.indexOf(plugin['no-changes-response']) === 0) {
+            if (stdoutP.indexOf(plugin['no-changes-response']) === 0 && this._lastStatus !== statuses.ERROR && !force) {
                 this.log(statuses.NO_CHANGES, `No Changes in Repository - ${this._config.server}/${this._config.branch}`);
                 return;
             }
 
-            exec(this._config['post-script'], { cwd: this._config.directory }, (errorPS, stdoutPS, stderrPS) => {
-                if (errorPS) {
-                    this.log(statuses.ERROR, `Error while Deploying changes: ${stderrPS || 'Unknown Error'}`);
-                    return;            
-                }
+            if (this._config['post-script']) {
+                exec(this._config['post-script'], { cwd: this._config.directory }, (errorPS, stdoutPS, stderrPS) => {
+                    if (errorPS) {
+                        this.log(statuses.ERROR, `Error while Deploying changes: ${stderrPS || 'Unknown Error'}`);
+                        return;            
+                    }
 
-                this.log(statuses.OK, 'Deployed new version');
-            });
+                    this.log(statuses.OK, 'Deployed new version');
+                });
+            } else {
+                this.log(statuses.OK, 'Deployed new version without Post Scripts');
+            }
         });
     }
 
