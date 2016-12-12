@@ -8,5 +8,6 @@ module.exports = {
     IDLE,
     OK,
     NO_CHANGES,
+    PROCESSING,
     ERROR
 }

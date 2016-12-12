@@ -61,6 +61,7 @@ class AppService {
 
     execute() {
         this._lastExecuted = new Date();
+        this._status = statuses.PROCESSING;
         const pluginPath = `../plugins/${this._config.plugin}.json`;
         const plugin = require(pluginPath);
         const pull = plugin.pull
