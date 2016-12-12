@@ -13,6 +13,7 @@ const DefaultState = Immutable.Record({
   data: Immutable.List(),
   isFetching: false,
   error: null,
+  receivedAt: null,
 });
 
 const initialState = new DefaultState();
@@ -23,7 +24,7 @@ export default function(state = initialState, action) {
       return state.merge({ isFetching: true });
 
     case SUCCESS_APPS:
-      return state.merge({ isFetching: false, data: Immutable.fromJS(action.result) });
+      return state.merge({ isFetching: false, data: Immutable.fromJS(action.result), receivedAt: action.receivedAt });
 
     case FAILED_APPS:
       return state.merge({ isFetching: false, error: 'Server Error' });

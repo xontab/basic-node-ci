@@ -60,7 +60,7 @@ export default class DashboardPage extends Component {
     }
 
 
-    _getFormattedDate(date) {
+    _getFormattedTime(date) {
         if (date) {
             const dateParsed = new Date(date);
             const hours = `0${dateParsed.getHours()}`.substr(-2);
@@ -72,14 +72,33 @@ export default class DashboardPage extends Component {
         return 'Unknown';
     }
 
+    _getFormattedDate(date) {
+        if (date) {
+            const dateParsed = new Date(date);
+            const monthNames = [
+                "January", "February", "March",
+                "April", "May", "June", "July",
+                "August", "September", "October",
+                "November", "December"
+            ];
+
+            var day = dateParsed.getDate();
+            var monthIndex = dateParsed.getMonth();
+            var year = dateParsed.getFullYear();
+            return `${day} ${monthNames[monthIndex]} ${year} ${this._getFormattedTime(date)}`;
+        }
+
+        return '';
+    }
+
     _handleExecuteClick(id) {
         this.props.executeApp(id);
     }
 
     _renderAppsRows = (data, i) => {
         const id = data.get('id');
-        const updatedTime = this._getFormattedDate(data.getIn(['lastLog', 'date']));
-        const nextExecutionDate = this._getFormattedDate(data.get('nextExecutionDate'));
+        const updatedTime = this._getFormattedTime(data.getIn(['lastLog', 'date']));
+        const nextExecutionDate = this._getFormattedTime(data.get('nextExecutionDate'));
         const status = this._getStatusCode(data.get('status'));
         const statusClean = status.toLowerCase().replace(' ', '-');
 
@@ -121,11 +140,15 @@ export default class DashboardPage extends Component {
     }
     
     render() {
-        const data = this.props.apps.get('data');
+        const { apps } = this.props;
+        const data = apps.get('data');
+        const receivedAt = apps.get('receivedAt');
 
         return (
             <div>
-                <h1>Running Apps</h1>
+                <h1>Running Apps
+                    <span>Updated on: {this._getFormattedDate(receivedAt)}</span>
+                </h1>
                 {
                     this.isLoading
                     ? <Loader />
