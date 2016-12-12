@@ -86,10 +86,10 @@ export default class DashboardPage extends Component {
         return (
             <tr key={i} className={globalStyles[statusClean]}>
                 <td>{data.get('id')}</td>
-                <td>{status}</td>
                 <td>{updatedTime}</td>
                 <td>{nextExecutionDate}</td>
                 <td>{data.getIn(['lastLog', 'text'])}</td>
+                <td>{status}</td>
                 <td>
                     <button 
                         disabled={status === 'Processing'}
@@ -106,10 +106,10 @@ export default class DashboardPage extends Component {
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Status</th>
                         <th>Updated On</th>
                         <th>Next Execute</th>
-                        <th>Last Status</th>
+                        <th>Last Status Log</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
