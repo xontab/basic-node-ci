@@ -1,0 +1,7 @@
+{
+    "interval": 300000,
+    "plugin": "git",
+    "server": "origin",
+    "branch": "master",
+    "post-script": "run.bat"
+}

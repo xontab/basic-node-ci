@@ -1,0 +1,4 @@
+{
+    "pull": "git pull {server} {branch}",
+    "no-changes-response": "Already up-to-date."
+}
