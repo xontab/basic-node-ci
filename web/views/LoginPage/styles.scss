@@ -1,10 +1,11 @@
 body {
     background: #eee;
+
     .loginBox {
-        width: 400px;
         position: absolute;
         top: 50%;
         margin-top: -300px;
+        width: 400px;
         left: 50%;
         margin-left: -200px;
 
@@ -21,6 +22,16 @@ body {
             width: 100%;
             margin-top: 30px;
             margin-bottom: 20px;
+        }
+    }
+}
+
+@media (max-width: 400px) {
+    body {
+        .loginBox {
+            width: 100%;
+            left: 0;
+            margin-left: 0;
         }
     }
 }

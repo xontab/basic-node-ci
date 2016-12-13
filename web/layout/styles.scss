@@ -53,3 +53,11 @@ body {
         }
     }
 }
+
+@media (max-width: 650px) {
+    h1, h2, h3 {
+        span {
+            display: none;
+        }
+    }
+}
