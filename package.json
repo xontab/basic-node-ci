@@ -23,6 +23,7 @@
     "es6-promise": "^4.0.5",
     "html-webpack-plugin": "^2.24.1",
     "immutable": "^3.8.1",
+    "material-ui": "^0.16.5",
     "null-loader": "^0.1.1",
     "postcss-cssnext": "^2.9.0",
     "postcss-import": "^9.0.0",
@@ -44,6 +45,7 @@
   },
   "dependencies": {
     "express": "^4.14.0",
-    "open": "0.0.5"
+    "open": "0.0.5",
+    "sha1": "^1.1.1"
   }
 }

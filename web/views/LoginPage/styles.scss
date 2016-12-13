@@ -1,0 +1,26 @@
+body {
+    background: #eee;
+    .loginBox {
+        width: 400px;
+        position: absolute;
+        top: 50%;
+        margin-top: -300px;
+        left: 50%;
+        margin-left: -200px;
+
+        h1 {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .box {
+            padding: 20px 40px;
+        }
+
+        .button {
+            width: 100%;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+    }
+}

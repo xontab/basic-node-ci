@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import RaisedButton from 'material-ui/RaisedButton';
 
 import Loader from '../../components/common/Loader';
+
+import {
+    getFormattedDate,
+    getFormattedTime,
+    getStatusCode
+} from '../../helpers/formatting';
 
 import { 
     fetchApps,
@@ -47,107 +55,68 @@ export default class DashboardPage extends Component {
         }
     }
 
-    _getStatusCode(id) {
-        switch(id) {
-            case 0: return 'Idle';
-            case 1: return 'OK';
-            case 2: return 'No Changes';
-            case 3: return 'Processing';
-            case 4: return 'Error';
-        }
-
-        return 'Unknown';
-    }
-
-
-    _getFormattedTime(date) {
-        if (date) {
-            const dateParsed = new Date(date);
-            const hours = `0${dateParsed.getHours()}`.substr(-2);
-            const mins = `0${dateParsed.getMinutes()}`.substr(-2);
-            const secs = `0${dateParsed.getSeconds()}`.substr(-2);
-            return `${hours}:${mins}:${secs}`;
-        }
-
-        return 'Unknown';
-    }
-
-    _getFormattedDate(date) {
-        if (date) {
-            const dateParsed = new Date(date);
-            const monthNames = [
-                "January", "February", "March",
-                "April", "May", "June", "July",
-                "August", "September", "October",
-                "November", "December"
-            ];
-
-            var day = dateParsed.getDate();
-            var monthIndex = dateParsed.getMonth();
-            var year = dateParsed.getFullYear();
-            return `${day} ${monthNames[monthIndex]} ${year} ${this._getFormattedTime(date)}`;
-        }
-
-        return '';
-    }
-
     _handleExecuteClick(id) {
         this.props.executeApp(id);
     }
 
     _renderAppsRows = (data, i) => {
         const id = data.get('id');
-        const updatedTime = this._getFormattedTime(data.getIn(['lastLog', 'date']));
-        const nextExecutionDate = this._getFormattedTime(data.get('nextExecutionDate'));
-        const status = this._getStatusCode(data.get('status'));
+        const updatedTime = getFormattedTime(data.getIn(['lastLog', 'date']));
+        const nextExecutionDate = getFormattedTime(data.get('nextExecutionDate'));
+        const status = getStatusCode(data.get('status'));
         const statusClean = status.toLowerCase().replace(' ', '-');
 
         return (
-            <tr key={i} className={globalStyles[statusClean]}>
-                <td>{data.get('id')}</td>
-                <td>{updatedTime}</td>
-                <td>{nextExecutionDate}</td>
-                <td>{data.getIn(['lastLog', 'text'])}</td>
-                <td>{status}</td>
-                <td>
-                    <button 
+            <TableRow key={i} className={globalStyles[statusClean]}>
+                <TableRowColumn>{data.get('id')}</TableRowColumn>
+                <TableRowColumn width="55px">{updatedTime}</TableRowColumn>
+                <TableRowColumn width="55px">{nextExecutionDate}</TableRowColumn>
+                <TableRowColumn className={globalStyles.wrap} width="330px">{data.getIn(['lastLog', 'text'])}</TableRowColumn>
+                <TableRowColumn>{status}</TableRowColumn>
+                <TableRowColumn>
+                    <RaisedButton
+                        label="Execute"
+                        primary={true}
                         disabled={status === 'Processing'}
                         onClick={() => this._handleExecuteClick(id)}
-                    >Execute</button>
-                </td>
-            </tr>
+                    />
+                </TableRowColumn>
+            </TableRow>
         );
     }
 
     _renderAppsTable(data) {
         return (
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Updated On</th>
-                        <th>Next Execute</th>
-                        <th>Last Status Log</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <Table selectable={false}>
+                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                    <TableRow>
+                        <TableHeaderColumn>Name</TableHeaderColumn>
+                        <TableHeaderColumn width="55px">Updated On</TableHeaderColumn>
+                        <TableHeaderColumn width="55px">Next Execute</TableHeaderColumn>
+                        <TableHeaderColumn width="330px">Last Status Log</TableHeaderColumn>
+                        <TableHeaderColumn>Status</TableHeaderColumn>
+                        <TableHeaderColumn>Actions</TableHeaderColumn>
+                    </TableRow>
+                </TableHeader>
+                <TableBody displayRowCheckbox={false}>
                     { data && data.map(this._renderAppsRows) }
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         );
     }
     
     render() {
         const { apps } = this.props;
         const data = apps.get('data');
-        const receivedAt = apps.get('receivedAt');
+        const receivedAt = getFormattedDate(apps.get('receivedAt'));
 
         return (
             <div>
                 <h1>Running Apps
-                    <span>Updated on: {this._getFormattedDate(receivedAt)}</span>
+                    {
+                        receivedAt
+                        && <span>Updated on: {receivedAt}</span>
+                    }
                 </h1>
                 {
                     this.isLoading

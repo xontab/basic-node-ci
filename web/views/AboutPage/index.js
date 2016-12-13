@@ -7,9 +7,7 @@ export default class AboutPage extends Component {
         return (
             <div>
                 <h1 className={globalStyles.title}>About</h1>
-                <div className={globalStyles.well}>
-                    <h2 className={globalStyles.simple}>Coming soon.  WIP</h2>
-                </div>
+                Coming soon.  WIP
             </div>
         );
     }
