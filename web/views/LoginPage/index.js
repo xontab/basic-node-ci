@@ -9,6 +9,8 @@ import Snackbar from 'material-ui/Snackbar';
 
 import { login } from '../../redux/actions/authActions';
 
+import packageConfig from '../../../package.json';
+
 import '../../layout/styles.scss';
 import styles from './styles.scss';
 
@@ -99,6 +101,9 @@ export default class LoginPage extends Component {
                         </div>
                     </form>
                 </Paper>
+                <footer>
+                    Created by xonTAB.  Version {packageConfig.version}.
+                </footer>
             </div>
         );
     }
