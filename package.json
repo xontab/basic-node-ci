@@ -22,7 +22,6 @@
     "css-loader": "^0.26.1",
     "es6-promise": "^4.0.5",
     "html-webpack-plugin": "^2.24.1",
-    "immutable": "^3.8.1",
     "material-ui": "^0.16.5",
     "null-loader": "^0.1.1",
     "postcss-cssnext": "^2.9.0",
@@ -44,7 +43,10 @@
     "webpack-hot-middleware": "^2.13.2"
   },
   "dependencies": {
+    "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "immutable": "^3.8.1",
+    "node-uuid": "^1.4.7",
     "open": "0.0.5",
     "sha1": "^1.1.1"
   }

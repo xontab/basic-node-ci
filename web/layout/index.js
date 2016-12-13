@@ -16,6 +16,10 @@ export default class Layout extends Component {
         to: 'about',
         text: 'About',
       },
+      {
+        to: 'logout',
+        text: 'Logout',
+      },
     ];
   }
 

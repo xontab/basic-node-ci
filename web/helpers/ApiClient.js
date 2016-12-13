@@ -1,5 +1,7 @@
 import fetch from 'isomorphic-fetch';
 
+import { browserHistory } from 'react-router';
+
 const methods = ['get', 'post', 'put', 'delete'];
 const acceptHeader = 'Accept';
 const contentTypeHeader = 'Content-Type';
@@ -17,6 +19,11 @@ function formatUrl(path) {
 export function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
+  }
+
+  if (response.status === 401) {
+    localStorage.removeItem('accessToken');
+    browserHistory.push('/');
   }
 
   const error = new Error(response.statusText);

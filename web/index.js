@@ -26,12 +26,14 @@ import {
 import { fade } from 'material-ui/utils/colorManipulator';
 import spacing from 'material-ui/styles/spacing';
 
+import { logout } from './redux/actions/authActions';
+
 import Layout from './layout';
 import DashboardPage from './views/DashboardPage';
 import AboutPage from './views/AboutPage';
 import LoginPage from './views/LoginPage';
 
-const client = new ApiClient('http://localhost:3000/api');
+const client = new ApiClient('http://localhost:3000/api', () => store.getState().getIn(['auth', 'accessToken']));
 const store = configureStore(client);
 
 const muiTheme = getMuiTheme({
@@ -55,12 +57,31 @@ const muiTheme = getMuiTheme({
   },
 });
 
+function _redirectToLogin(nextState, replaceState) {
+  if (store.getState().getIn(['auth', 'accessToken']).length === 0) {
+    replaceState('login');
+  }
+}
+
+function _redirectToDashboard(nextState, replaceState) {
+  if (store.getState().getIn(['auth', 'accessToken']).length > 0) {
+    replaceState('/');
+  }
+}
+
+function _handleLogout(nextState, replaceState) {
+  store.dispatch(logout()).then(() => {
+    browserHistory.push('login');
+  });
+}
+
 render(
   <MuiThemeProvider muiTheme={muiTheme}>
     <Provider store={store}>
       <Router history={browserHistory}>
-        <Route path="login" component={LoginPage} />
-        <Route path="/" component={Layout}>
+        <Route path="login" component={LoginPage} onEnter={_redirectToDashboard} />
+        <Route path="logout" onEnter={_handleLogout} />
+        <Route path="/" component={Layout} onEnter={_redirectToLogin}>
           <IndexRoute component={DashboardPage} />
           <Route path="about" component={AboutPage} />
         </Route>

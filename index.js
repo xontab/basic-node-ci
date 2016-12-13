@@ -1,17 +1,49 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
+app.use(bodyParser.json());
+
+const Immutable = require('Immutable');
+const uuid = require('node-uuid');
+const loggedUsers = [];
 
 // APIs
 const appsHelper = require('./app/helpers/apps.js');
 const loggingHelper = require('./app/helpers/logging.js');
 const list = require('./config/apps.json');
 
-app.get('/api/apps', (req, res) => {
+function handleAuthenication(req, res, next) {
+  const accessToken = req.headers['authorization'];
+  if (accessToken && accessToken.length > 7 && loggedUsers[accessToken.substr(7)] && loggedUsers[accessToken.substr(7)] > new Date().getTime()) {
+    next();
+  } else {
+    res.status(401).send({ error: 'Authentication failed' });
+  }
+}
+
+app.get('/api/apps', handleAuthenication, (req, res) => {
     res.send(appsHelper.getRunningApps());
 });
 
-app.get('/api/exec/:id', (req, res) => {
+app.get('/api/exec/:id', handleAuthenication,  (req, res) => {
     res.send(appsHelper.executeApp(req.params.id));
+});
+
+app.get('/api/logout', (req, res) => {
+    const accessToken = req.headers['authorization'];
+    loggedUsers[accessToken.substr(7)] = undefined;
+    res.send({ status: 'OK' });
+});
+
+app.post('/api/login', (req, res) => {
+  const logins = Immutable.fromJS(require('./config/users.json'));
+  if (logins.findIndex(x => x.get('username') === req.body.username && x.get('password') === req.body.password) >= 0) {
+    const accessToken = uuid.v4();
+    loggedUsers[accessToken] = new Date().getTime() + 3600000;
+    res.send({ token: accessToken });
+  } else {
+    res.send({ token: '' });
+  }
 });
 
 // Webpack

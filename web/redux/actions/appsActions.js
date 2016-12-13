@@ -18,7 +18,6 @@ export function fetchApps() {
     });
 }
 
-
 export function executeApp(id) {
   return dispatch =>
     dispatch({
