@@ -57,13 +57,13 @@ To run the CI server just execute the following command:
 
 ### Web interface
 
-The web interface is started automatically when the CI server is running.  Just open http://localhost:3000 in a web browser for a basic web interface.
+The web interface is started automatically when the CI server is running.  Just open http://localhost:8089 in a web browser for a basic web interface.
 
 The default credentials are:
 * Username: admin
 * Password: admin123
 
-The users' credentials are stored in the `users.json` file in the `config` folder.
+The users' credentials are stored in the `users.json` file in the `config` folder.  Also the Web UI can be disabled for security reasons and the port can be changed from the `web.json` file in the `config` directory.
 
 Please Note: You need to restart the server when changes are applied to the above file.
 

@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 
 import ApiClient from './helpers/ApiClient';
 import configureStore from './store/configureStore';
+import webConfig from '../config/web.json';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -33,7 +34,7 @@ import DashboardPage from './views/DashboardPage';
 import AboutPage from './views/AboutPage';
 import LoginPage from './views/LoginPage';
 
-const client = new ApiClient('http://localhost:3000/api', () => store.getState().getIn(['auth', 'accessToken']));
+const client = new ApiClient(`http://localhost:${webConfig['web-port']}/api`, () => store.getState().getIn(['auth', 'accessToken']));
 const store = configureStore(client);
 
 const muiTheme = getMuiTheme({
