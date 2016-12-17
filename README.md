@@ -40,8 +40,8 @@ Please Note: You need to restart the server when changes are applied to the abov
 
 | Paramater | Type | Remark | Defaut Value |
 | --- | --- | --- | --- |
-| `id` | string |  The name of the application  | `undefined` |
-| `directory` | string | The source code of the application  | `undefined` |
+| `id` | string |  The name of the application (required) | `undefined` |
+| `directory` | string | The source code of the application (required)  | `undefined` |
 | `post-script` | string | The script filename in the source code directory which will run after the latest source code is pulled  | `undefined` |
 | `interval` | number |  How frequent the latest source code will be pulled from source control  | `300000` |
 | `plugin` | enum | The source control engine.  Currently only `git` is supported  | `git` |
