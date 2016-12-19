@@ -1,6 +1,6 @@
-# Basic Node CI
+# Basic Node CI (Continuous Integration)
 
-Very Basic and minimalistic Node-based CI (Continuous Integration).
+Very Basic and minimalistic Node-based CI (Continuous Integration) application
 
 **Table of Contents**
 
@@ -17,6 +17,7 @@ Very Basic and minimalistic Node-based CI (Continuous Integration).
 * Minimal Configuration
 * Low resources needed
 * Easy to use web interface
+
 
 ## Installation
 To install just run the following command:
