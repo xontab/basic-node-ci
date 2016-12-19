@@ -31,6 +31,10 @@ if (webConfig['web-ui-enable']) {
       res.send(appsHelper.getRunningApps());
   });
 
+  app.get('/api/logs/:id', handleAuthenication, (req, res) => {
+      res.send(appsHelper.getFullLogs(req.params.id));
+  });
+
   app.get('/api/exec/:id', handleAuthenication,  (req, res) => {
       res.send(appsHelper.executeApp(req.params.id));
   });

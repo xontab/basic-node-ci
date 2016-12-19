@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 
@@ -68,7 +69,9 @@ export default class DashboardPage extends Component {
 
         return (
             <TableRow key={i} className={globalStyles[statusClean]}>
-                <TableRowColumn>{data.get('id')}</TableRowColumn>
+                <TableRowColumn>
+                    <Link to={`/app/${id}`}>{id}</Link>
+                </TableRowColumn>
                 <TableRowColumn width="55px">{updatedTime}</TableRowColumn>
                 <TableRowColumn width="55px">{nextExecutionDate}</TableRowColumn>
                 <TableRowColumn className={globalStyles.wrap} width="330px">{data.getIn(['lastLog', 'text'])}</TableRowColumn>
@@ -76,7 +79,7 @@ export default class DashboardPage extends Component {
                 <TableRowColumn>
                     <RaisedButton
                         label="Execute"
-                        primary={true}
+                        primary
                         disabled={status === 'Processing'}
                         onClick={() => this._handleExecuteClick(id)}
                     />

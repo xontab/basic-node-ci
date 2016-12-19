@@ -9,7 +9,7 @@ function addNewApp(config, i) {
         logging.log('Initialise', `Error: App ${i}'s Id is not defined`);
         return;
     }
-    appsList[config.id] = new AppService(i, config);
+    appsList[config.id.toLowerCase()] = new AppService(i, config);
 }
 
 function loadConfig(config) {
@@ -30,8 +30,12 @@ function getRunningApps() {
     );
 }
 
+function getFullLogs(id) {
+    return appsList[id.toLowerCase()].getFullLogs();
+}
+
 function executeApp(id) {
-    appsList[id].execute(true);
+    appsList[id.toLowerCase()].execute(true);
     return true;
 }
 
@@ -39,5 +43,6 @@ module.exports = {
     addNewApp,
     loadConfig,
     getRunningApps,
+    getFullLogs,
     executeApp
 };

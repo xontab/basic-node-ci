@@ -16,9 +16,9 @@ class AppService {
     init(config) {
         const newConfig = Object.assign({}, defaultConfig, config);
         this._config = newConfig;
-        this.log(statuses.IDLE, 'Adding new config');
+        this.addLog(statuses.IDLE, 'Adding new config');
         if (!this._config.directory) {
-            this.log(statuses.ERROR, 'Error: Directory is not defined');
+            this.addLog(statuses.ERROR, 'Error: Directory is not defined');
             return;
         }
         this.dispose();
@@ -49,7 +49,11 @@ class AppService {
         return {};
     }
 
-    log(type, text) {
+    getFullLogs() {
+        return this._logs;
+    }
+
+    addLog(type, text) {
         this._status = type;
         if (type === statuses.OK || type === statuses.ERROR || type === statuses.NO_CHANGES) {
             this._lastStatus = type;
@@ -59,6 +63,9 @@ class AppService {
             text: text,
             date: new Date()
         });
+        if (this._logs.length > 100) {
+            this._logs.pop();
+        }
         loggingHelper.log(this._config.id, text);
     }
 
@@ -72,28 +79,28 @@ class AppService {
             .replace('{branch}', this._config.branch);
 
         exec(pull, { cwd: this._config.directory }, (errorP, stdoutP, stderrP) => {
-            this.log(statuses.PROCESSING, `Executing`);
+            this.addLog(statuses.PROCESSING, `Executing`);
             if (errorP) {
-                this.log(statuses.ERROR, `Error while Pulling changes: ${stderrP || 'Unknown Error'}`);
+                this.addLog(statuses.ERROR, `Error while Pulling changes: ${stderrP || 'Unknown Error'}`);
                 return;            
             }
 
             if (stdoutP.indexOf(plugin['no-changes-response']) === 0 && this._lastStatus !== statuses.ERROR && !force) {
-                this.log(statuses.NO_CHANGES, `No Changes in Repository - ${this._config.server}/${this._config.branch}`);
+                this.addLog(statuses.NO_CHANGES, `No Changes in Repository - ${this._config.server}/${this._config.branch}`);
                 return;
             }
 
             if (this._config['post-script']) {
                 exec(this._config['post-script'], { cwd: this._config.directory }, (errorPS, stdoutPS, stderrPS) => {
                     if (errorPS) {
-                        this.log(statuses.ERROR, `Error while Deploying changes: ${stderrPS || 'Unknown Error'}`);
+                        this.addLog(statuses.ERROR, `Error while Deploying changes: ${stderrPS || 'Unknown Error'}`);
                         return;            
                     }
 
-                    this.log(statuses.OK, 'Deployed new version');
+                    this.addLog(statuses.OK, 'Deployed new version');
                 });
             } else {
-                this.log(statuses.OK, 'Deployed new version without Post Scripts');
+                this.addLog(statuses.OK, 'Deployed new version without Post Scripts');
             }
         });
     }

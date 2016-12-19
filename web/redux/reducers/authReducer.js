@@ -8,7 +8,7 @@ import {
 } from '../actions/authActions';
 
 const DefaultState = Immutable.Record({
-  accessToken: localStorage['accessToken'] || '',
+  accessToken: localStorage.accessToken || '',
   isFetching: false,
   error: null,
   receivedAt: null,
@@ -24,7 +24,7 @@ export default function(state = initialState, action) {
       return state.merge({ isFetching: true, accessToken: '' });
 
     case SUCCESS_LOGIN:
-      localStorage['accessToken'] = action.result.token;
+      localStorage.accessToken = action.result.token;
       return state.merge({ isFetching: false, accessToken: action.result.token, receivedAt: action.receivedAt });
 
     case FAILED_LOGIN:

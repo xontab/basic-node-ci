@@ -26,13 +26,17 @@ import {
 } from 'material-ui/styles/colors';
 import { fade } from 'material-ui/utils/colorManipulator';
 import spacing from 'material-ui/styles/spacing';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
 
 import { logout } from './redux/actions/authActions';
 
 import Layout from './layout';
-import DashboardPage from './views/DashboardPage';
-import AboutPage from './views/AboutPage';
 import LoginPage from './views/LoginPage';
+import DashboardPage from './views/DashboardPage';
+import AppPage from './views/AppPage';
+import HelpPage from './views/HelpPage';
+import AboutPage from './views/AboutPage';
 
 const client = new ApiClient(`http://localhost:${webConfig['web-port']}/api`, () => store.getState().getIn(['auth', 'accessToken']));
 const store = configureStore(client);
@@ -58,14 +62,14 @@ const muiTheme = getMuiTheme({
   },
 });
 
-function _redirectToLogin(nextState, replaceState) {
-  if (store.getState().getIn(['auth', 'accessToken']).length === 0) {
+function _redirectToLoginIfNeeded(nextState, replaceState) {
+  if (!localStorage.accessToken || store.getState().getIn(['auth', 'accessToken']).length === 0) {
     replaceState('login');
   }
 }
 
-function _redirectToDashboard(nextState, replaceState) {
-  if (store.getState().getIn(['auth', 'accessToken']).length > 0) {
+function _redirectToDashboardIfNeeded(nextState, replaceState) {
+  if (localStorage.accessToken && store.getState().getIn(['auth', 'accessToken']).length > 0) {
     replaceState('/');
   }
 }
@@ -80,10 +84,12 @@ render(
   <MuiThemeProvider muiTheme={muiTheme}>
     <Provider store={store}>
       <Router history={browserHistory}>
-        <Route path="login" component={LoginPage} onEnter={_redirectToDashboard} />
+        <Route path="login" component={LoginPage} onEnter={_redirectToDashboardIfNeeded} />
         <Route path="logout" onEnter={_handleLogout} />
-        <Route path="/" component={Layout} onEnter={_redirectToLogin}>
+        <Route path="/" component={Layout} onEnter={_redirectToLoginIfNeeded}>
           <IndexRoute component={DashboardPage} />
+          <Route path="app/:id" component={AppPage} />
+          <Route path="help" component={HelpPage} />
           <Route path="about" component={AboutPage} />
         </Route>
       </Router>

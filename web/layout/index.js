@@ -13,11 +13,15 @@ export default class Layout extends Component {
 
     this.headerItems = [
       {
-        to: 'about',
+        to: '/help',
+        text: 'Help',
+      },
+      {
+        to: '/about',
         text: 'About',
       },
       {
-        to: 'logout',
+        to: '/logout',
         text: 'Logout',
       },
     ];

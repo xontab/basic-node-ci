@@ -77,6 +77,7 @@ This application is still a WIP and more features will be coming in the near fut
 * More details in dashboard
 * Permissions
 * Add and configure apps from web portal
+* Help page
 
 ## Credits
 

@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux-immutable';
 
-import apps from './appsReducer';
 import auth from './authReducer';
+import apps from './appsReducer';
+import logs from './logsReducer';
 
 const rootReducer = combineReducers({
-  apps,
   auth,
+  apps,
+  logs,
 });
 
 export default rootReducer;
