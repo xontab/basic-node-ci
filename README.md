@@ -1,13 +1,22 @@
 # Basic Node CI
 
-Very Basic and minimalistic Node-based CI.
+Very Basic and minimalistic Node-based CI (Continuous Integration).
 
 **Table of Contents**
 
+- [Why yet another CI](#why-yet-another-ci)
 - [Installation](#installation)
 - [Start CI Server](#start-ci-server)
 - [Future versions](#future-versions)
 - [Credits](#credits)
+
+## Why yet another CI
+
+* Free for both public and private projects
+* Cross-platform, works also on Windows
+* Minimal Configuration
+* Low resources needed
+* Easy to use web interface
 
 ## Installation
 To install just run the following command:
